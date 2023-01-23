@@ -1,5 +1,5 @@
-window.repo = "BuffelSaft/pokeemerald/master"
-window.repoDex = "ydarissep/inclement-emerald-pokedex"
+window.repo = "ydarissep/Techno-Emerald-Pokedex/main"
+window.repoDex = "ydarissep/Techno-Emerald-Pokedex/main"
 
 window.panelSpecies = ""
 

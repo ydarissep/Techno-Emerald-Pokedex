@@ -43,49 +43,7 @@ function regexWildLocations(jsonWildLocations, locations){
 		}
 	}
 
-
-	const berryEncounters = jsonWildLocations["wild_encounter_groups"][3]["encounters"]
-	const key = "land_mons"
-
-
-	for(let i = 0; i < berryEncounters.length; i++)
-	{
-		const zone = "Berry stage: "
-
-		if("base_label" in berryEncounters[i]){
-
-			if(!(zone in locations)){
-				locations[zone] = {}
-			}
-
-			if("base_label" in berryEncounters[i]){
-				const method = berryEncounters[i]["base_label"].replace(/^gBerryStage|_/g, "").replace(/([A-Z])/g, " $1").replace(/(\d+)/g, " $1").trim()
-
-
-				for(let j = 0; j < berryEncounters[i][key]["mons"].length; j++){
-
-					const name = berryEncounters[i][key]["mons"][j]["species"]
-
-					if(!(method in locations[zone])){
-						locations[zone][method] = {}
-					}
-
-
-					if(name in locations[zone][method]){
-				    	locations[zone][method][name] += returnRarity(key, j)
-				    }
-				    else{
-				    	locations[zone][method][name] = returnRarity(key, j)
-				    }
-				}
-			}
-		}
-		else{
-			console.log("missing \"base_label\" in berryEncounters[", i, "] (regexWildLocations)")
-			continue
-		}
-	}
-
+	//const key = "land_mons"
 
     return locations
 }
@@ -189,7 +147,9 @@ function returnRarity(method, index){
 		else if(index === 2)
 			return 5
 		else if(index === 3)
-			return 5
+			return 4
+		else if(index === 4)
+			return 1
 		else
 			return 100
 	}

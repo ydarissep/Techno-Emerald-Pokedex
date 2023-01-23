@@ -44,14 +44,14 @@ function regexBaseStats(textBaseStats, species){
     const lines = textBaseStats.split("\n")
 
     const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|type1|type2|item1|item2|eggGroup1|eggGroup2|abilities/i
-    let change = false, value, name
+    let stop = false, value, name
 
     lines.forEach(line => {
 
         if(/#else/i.test(line))
-                change = true
+                stop = true
         if(/#endif/i.test(line))
-                change = false
+                stop = false
 
 
         const matchSpecies = line.match(/SPECIES_\w+/i)
@@ -90,15 +90,193 @@ function regexBaseStats(textBaseStats, species){
 
 
 
-                if(change === true)
-                    species[name]["changes"].push([match, value])
-                else if(change === false)
+                if(!stop){
                     species[name][match] = value
+                }
             }
         }
     })
     return getBST(species)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function regexChanges(textChanges, species){
+    const lines = textChanges.split("\n")
+
+    const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|type1|type2|itemCommon|itemRare|eggGroup1|eggGroup2|abilities/i
+    let stop = false, value, name, buildDefines = true, defines = {}, define = "", keep = false, argument = [], argumentDefine = []
+
+    for(let i = 0; i < lines.length; i++){
+        const line = lines[i]
+        if(buildDefines && /gBaseStats/i.test(line)){
+            buildDefines = false
+        }
+        if(buildDefines){
+            const matchDefine = line.match(/#define (.*)/i)
+            if(matchDefine !== null){
+                if(!/\\/.test(line)){
+                    Object.keys(defines).forEach(testDefine => {
+                        const tempDefine = testDefine.match(/(\w+)/)
+                        if(tempDefine[1] && line.includes(tempDefine[1])){
+                            define = matchDefine[1].replace(testDefine, "").trim()
+                            defines[define] = defines[testDefine]
+                        }
+                    })
+                }
+                else{
+                    define = matchDefine[1].replaceAll("\\", "").trim()
+                    defines[define] = []
+                }
+            }
+            else if(keep && define in defines){
+                defines[define].push(line)
+            }
+            if(/\\/.test(line)){
+                keep = true
+            }
+            else{
+                keep = false
+            }
+        }
+        else{
+
+            if(/#else/i.test(line))
+                    stop = true
+            if(/#endif/i.test(line))
+                    stop = false
+
+
+            const matchSpecies = line.match(/\[(SPECIES_\w+)\] *=(.*)/i)
+            if(matchSpecies !== null){
+                name = matchSpecies[1]
+                stop = false
+                argument = []
+                argumentDefine = []
+
+                if(name !== "SPECIES_NONE" && name !== "SPECIES_EGG"){
+
+                    if(matchSpecies[2]){
+                        matchDefine = matchSpecies[2].replaceAll(",", "").trim().match(/(\w+)(.*)/)
+                        define = matchDefine[1]
+                        if(matchDefine[2]){
+                            argument = matchDefine[2].match(/\w+/g)
+                        }
+                        Object.keys(defines).forEach(testDefine => {
+                            testDefine = testDefine.match(/(\w+)(.*)/)
+                            if(testDefine[1] && testDefine[1] === define){
+                                define = testDefine[0]
+                                if(testDefine[2]){
+                                    argumentDefine = testDefine[2].match(/\w+/g)
+                                }
+                            }
+                        })
+                        if(define in defines){
+                            for(let j = 0; j < defines[define].length; j++){
+                                let newLine = defines[define][j].replaceAll(" ", "").replaceAll("}", ",")
+                                for(let k = 0; k < argument.length; k++){
+                                    newLine = newLine.replace(`${argumentDefine[k]},`, `${argument[k]},`)
+                                }
+                                lines.splice(i+1, 0, newLine)
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(/^\w+/.test(line.trim())){
+                define = ""
+                Object.keys(defines).forEach(testDefine => {
+                    const tempDefine = testDefine.match(/(\w+)/)
+                    if(tempDefine[1] && line.includes(tempDefine[1])){
+                        define = testDefine
+                    }
+                })
+                if(define in defines){
+                    for(let j = 0; j < defines[define].length; j++){
+                        lines.splice(i+1, 0, defines[define][j])
+                    }
+                }
+            }
+
+
+            if(name !== "SPECIES_NONE" && name !== "SPECIES_EGG"){
+                const matchRegex = line.match(regex)
+
+                if(matchRegex !== null){
+                    let match = matchRegex[0]
+
+
+
+                    if(match === "baseHP" || match === "baseAttack" || match === "baseDefense" || match === "baseSpeed" || match === "baseSpAttack" || match === "baseSpDefense"){
+                        const matchInt = line.match(/\d+/)
+                        if(matchInt !== null)
+                            value = parseInt(matchInt[0])
+                    }
+                    else if(match === "type1" || match === "type2" || match === "itemCommon" || match === "itemRare" || match === "eggGroup1" || match === "eggGroup2"){
+                        value = line.match(/\w+_\w+/i)
+                        if(value !== null)
+                            value = value[0]
+                    }
+                    else if(match === "abilities"){
+                        value = line.match(/ABILITY_\w+/ig)
+                        if(value !== null){
+                            for (let i = 0; i < 3; i++){
+                                if(value[i] === "ABILITY_NONE" || value[i] === undefined && i >= 1)
+                                    value[i] = value[i-1]
+                            }
+                        }
+                    }
+
+                    if(stop === false){
+                        if(name in species){
+                            if(match === "itemCommon"){
+                                match = "item1"
+                            }
+                            else if(match === "itemRare"){
+                                match = "item2"   
+                            }
+                            if(match in species[name] && JSON.stringify(species[name][match]) != JSON.stringify(value)){
+                                species[name]["changes"].push([match, value])
+                            }   
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return species
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -148,11 +326,12 @@ function regexLevelUpLearnsets(textLevelUpLearnsets, conversionTable, species){
 
 
         const matchLevelMove = line.match(/(\d+) *, *(MOVE_\w+)/i)
-        if(matchLevelMove !== null){
+        if(matchLevelMove !== null && speciesArray){
             const level = parseInt(matchLevelMove[1])
             const move = matchLevelMove[2]
-            for(let i = 0; i < speciesArray.length; i++)
+            for(let i = 0; i < speciesArray.length; i++){
                 species[speciesArray[i]]["levelUpLearnsets"].push([move, level])
+            }
         }
     })
     return species
@@ -179,7 +358,7 @@ function regexTMHMLearnsets(textTMHMLearnsets, species){
 
 
         const matchTmhmMove = line.match(/TMHM\d* *\((\w+ *\d+) *_ *(\w+)/i)
-        if(matchTmhmMove !== null){
+        if(matchTmhmMove !== null && name in species){
             const TMHM = matchTmhmMove[1]
             let move = matchTmhmMove[2]
             if(move === "SOLARBEAM")
@@ -365,7 +544,7 @@ function regexSprite(textSprite, conversionTable, species){
                 const matchPath = line.match(/graphics\/pokemon\/(\w+\/\w+\/\w+\/\w+\/\w+|\w+\/\w+\/\w+\/\w+|\w+\/\w+\/\w+|\w+\/\w+|\w+)\//i) // ¯\_(ツ)_/¯
                 if(matchPath !== null){
                     const path = matchPath[1]
-                    const url = `https://raw.githubusercontent.com/BuffelSaft/pokeemerald/master/graphics/pokemon/${path}/front.png`
+                    const url = `https://raw.githubusercontent.com/${repoDex}/data/species/pokemon/${path}/front.png`
                     for(let i = 0; i < conversionTable[conversion].length; i++){
                         species[speciesArray[i]]["sprite"] = url
                     }
@@ -386,40 +565,26 @@ function regexSprite(textSprite, conversionTable, species){
 
 
 
-function getTutorLearnsetsConversionTable(textMoves){
-    const lines = textMoves.split("\n")
-    let conversionTable = {}
+function regexTutorLearnsets(tutorLearnsets, species){
+    const lines = tutorLearnsets.split("\n")
+    let name = null
 
     lines.forEach(line => {
-        const matchMoveID = line.match(/#define *(MOVE_\w+) *(\d+)/i)
-        if(matchMoveID !== null){
-            const move = matchMoveID[1]
-            const ID = matchMoveID[2]
-            conversionTable[ID] = move
+        const matchSpecies = line.match(/SPECIES_\w+/i)
+        if(matchSpecies !== null){
+            name = matchSpecies[0]
+        }
+
+
+        const matchTutorMove = line.match(/TUTOR *\((MOVE_\w+)/i)
+        if(matchTutorMove !== null && name in species){
+            let move = matchTutorMove[1]
+
+            species[name]["tutorLearnsets"].push(move)
         }
     })
-    return conversionTable
-}
 
-function regexTutorLearnsets(tutorLearnsets, conversionTable, conversionMoveBadge, species){
-    for (const name of Object.keys(species)){
-        const speciesID = species[name]["ID"]
-        for (let i = 0; i < tutorLearnsets[speciesID].length; i++){
-            const move = conversionTable[tutorLearnsets[speciesID][i]]
-            let badge = conversionMoveBadge[move]
-            if(badge === undefined){
-                badge = "Special"
-            }
-            species[name]["tutorLearnsets"].push([move, badge])
-        }
-        if(species[name]["tutorLearnsets"].length === 0){
-            const targetSpecies = species[name]["forms"][0]
-            if(targetSpecies !== undefined){
-                species[name]["tutorLearnsets"] = species[targetSpecies]["tutorLearnsets"]
-            }
-        }
-    }
-    return species
+    return altFormsLearnsets(species, "forms", "tutorLearnsets")
 }
 
 

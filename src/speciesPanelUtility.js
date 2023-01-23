@@ -282,7 +282,7 @@ async function createSpeciesPanel(name){
 
     while(speciesPanelTutorTableTbody.firstChild)
         speciesPanelTutorTableTbody.removeChild(speciesPanelTutorTableTbody.firstChild)
-    buildSpeciesPanelLearnsetsTable(speciesPanelTutorTableTbody, name, "tutorLearnsets")
+    buildSpeciesPanelEggMovesTable(speciesPanelTutorTableTbody, name, "tutorLearnsets")
 
     while(speciesPanelEggMovesTableTbody.firstChild)
         speciesPanelEggMovesTableTbody.removeChild(speciesPanelEggMovesTableTbody.firstChild)
