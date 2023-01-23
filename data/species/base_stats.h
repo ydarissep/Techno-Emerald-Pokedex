@@ -14210,8 +14210,8 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_WATCHOG] =
     {
-        .baseHP        = 65,
-        .baseAttack    = 95,
+        .baseHP        = 70,
+        .baseAttack    = 100,
         .baseDefense   = 69,
         .baseSpeed     = 77,
         .baseSpAttack  = 60,
@@ -14292,7 +14292,7 @@ const struct BaseStats gBaseStats[] =
     {
         .baseHP        = 85,
         .baseDefense   = 90,
-        .baseSpeed     = 80,
+        .baseSpeed     = 90,
         .baseSpAttack  = 45,
         .baseSpDefense = 90,
         #if P_UPDATED_STATS >= GEN_6
@@ -16205,7 +16205,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SKILL_LINK, ABILITY_TECHNICIAN, ABILITY_CLOUD_NINE},
+            .abilities = {ABILITY_SKILL_LINK, ABILITY_TECHNICIAN, ABILITY_SKILL_LINK},
         #else
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NONE},
         #endif
@@ -16233,7 +16233,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SKILL_LINK, ABILITY_CUTE_CHARM, ABILITY_TECHNICIAN},
+            .abilities = {ABILITY_SKILL_LINK, ABILITY_TECHNICIAN, ABILITY_SKILL_LINK},
         #else
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_NONE},
         #endif
@@ -17398,13 +17398,13 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CRYOGONAL] =
     {
-        .baseAttack    = 35,
+        .baseAttack    = 25,
         .baseSpeed     = 105,
         .baseSpAttack  = 95,
         .baseSpDefense = 135,
         #if P_UPDATED_STATS >= GEN_7
             .baseHP        = 90,
-            .baseDefense   = 65,
+            .baseDefense   = 75,
         #else
             .baseHP        = 70,
             .baseDefense   = 30,
@@ -19792,7 +19792,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_ADAPTABILITY, ABILITY_CUTE_CHARM, ABILITY_MISTY_SURGE},
+            .abilities = {ABILITY_ADAPTABILITY, ABILITY_LEAD_SINGER, ABILITY_MISTY_SURGE},
         #else
             .abilities = {ABILITY_CUTE_CHARM, ABILITY_CUTE_CHARM},
         #endif
@@ -23508,7 +23508,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_WOOLOO] =
     {
-        .baseHP        = 72,
+        .baseHP        = 42,
         .baseAttack    = 50,
         .baseDefense   = 65,
         .baseSpeed     = 48,
@@ -23536,7 +23536,7 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_DUBWOOL] =
     {
-        .baseHP        = 92,
+        .baseHP        = 72,
         .baseAttack    = 90,
         .baseDefense   = 100,
         .baseSpeed     = 88,
@@ -24172,11 +24172,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_POLTEAGEIST] =
     {
-        .baseHP        = 80,
+        .baseHP        = 70,
         .baseAttack    = 65,
         .baseDefense   = 65,
         .baseSpeed     = 70,
-        .baseSpAttack  = 134,
+        .baseSpAttack  = 144,
         .baseSpDefense = 114,
         .type1 = TYPE_GHOST,
         .type2 = TYPE_GHOST,
@@ -24425,8 +24425,8 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_CURSOLA] =
     {
         .baseHP        = 80,
-        .baseAttack    = 75,
-        .baseDefense   = 65,
+        .baseAttack    = 65,
+        .baseDefense   = 75,
         .baseSpeed     = 30,
         .baseSpAttack  = 145,
         .baseSpDefense = 130,
@@ -27372,9 +27372,9 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_RAPIDASH_GALARIAN] =
     {
         .baseHP        = 65,
-        .baseAttack    = 100,
+        .baseAttack    = 120,
         .baseDefense   = 70,
-        .baseSpeed     = 105,
+        .baseSpeed     = 115,
         .baseSpAttack  = 80,
         .baseSpDefense = 80,
         .type1 = TYPE_PSYCHIC,
@@ -27389,7 +27389,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_FIELD,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_RUN_AWAY, ABILITY_PASTEL_VEIL, ABILITY_ANTICIPATION},
+            .abilities = {ABILITY_MAGIC_BOUNCE, ABILITY_PASTEL_VEIL, ABILITY_ADAPTABILITY},
         #else
             .abilities = {ABILITY_RUN_AWAY, ABILITY_NONE},
         #endif
