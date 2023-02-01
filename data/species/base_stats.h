@@ -14135,10 +14135,10 @@ const struct BaseStats gBaseStats[] =
     [SPECIES_DEWOTT] =
     {
         .baseHP        = 75,
-        .baseAttack    = 75,
+        .baseAttack    = 90,
         .baseDefense   = 60,
         .baseSpeed     = 60,
-        .baseSpAttack  = 83,
+        .baseSpAttack  = 68,
         .baseSpDefense = 60,
         .type1 = TYPE_WATER,
         .type2 = TYPE_WATER,
@@ -15986,8 +15986,8 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_CARRACOSTA] =
     {
-        .baseHP        = 74,
-        .baseAttack    = 108,
+        .baseHP        = 94,
+        .baseAttack    = 118,
         .baseDefense   = 133,
         .baseSpeed     = 32,
         .baseSpAttack  = 63,
@@ -16840,11 +16840,11 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_JOLTIK] =
     {
-        .baseHP        = 50,
+        .baseHP        = 60,
         .baseAttack    = 47,
         .baseDefense   = 50,
         .baseSpeed     = 90,
-        .baseSpAttack  = 82,
+        .baseSpAttack  = 89,
         .baseSpDefense = 50,
         .type1 = TYPE_BUG,
         .type2 = TYPE_ELECTRIC,
@@ -17421,7 +17421,7 @@ const struct BaseStats gBaseStats[] =
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroup1 = EGG_GROUP_MINERAL,
         .eggGroup2 = EGG_GROUP_MINERAL,
-        .abilities = {ABILITY_LEVITATE, ABILITY_NONE, ABILITY_ICY_HEART},
+        .abilities = {ABILITY_LEVITATE, ABILITY_ICY_HEART, ABILITY_FILTER},
         .bodyColor = BODY_COLOR_BLUE,
         .noFlip = FALSE,
     },
@@ -19151,12 +19151,12 @@ const struct BaseStats gBaseStats[] =
 
     [SPECIES_MEOWSTIC] =
     {
-        .baseHP        = 84,
-        .baseAttack    = 48,
-        .baseDefense   = 86,
+        .baseHP        = 114,
+        .baseAttack    = 28,
+        .baseDefense   = 91,
         .baseSpeed     = 104,
         .baseSpAttack  = 83,
-        .baseSpDefense = 91,
+        .baseSpDefense = 96,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
         .catchRate = 75,
@@ -19825,7 +19825,7 @@ const struct BaseStats gBaseStats[] =
         #endif
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_GLIDER, ABILITY_UNBURDEN, ABILITY_MOLD_BREAKER},
+            .abilities = {ABILITY_WRESTLERS_MARK, ABILITY_UNBURDEN, ABILITY_MOLD_BREAKER},
         #else
             .abilities = {ABILITY_LIMBER, ABILITY_NONE},
         #endif
@@ -24499,7 +24499,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_TANGLED_FEET, ABILITY_SCREEN_CLEANER, ABILITY_SLUSH_RUSH},
+            .abilities = {ABILITY_ICY_HEART, ABILITY_SCREEN_CLEANER, ABILITY_ICE_BODY},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -24842,7 +24842,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_MINERAL,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE, ABILITY_FILTER},
+            .abilities = {ABILITY_SHEER_FORCE, ABILITY_FILTER, ABILITY_HEAVY_METAL},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -24873,7 +24873,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_FIELD,
         .eggGroup2 = EGG_GROUP_MINERAL,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_SHEER_FORCE, ABILITY_NONE, ABILITY_FILTER},
+            .abilities = {ABILITY_SHEER_FORCE, ABILITY_FILTER, ABILITY_HEAVY_METAL},
         #else
             .abilities = {ABILITY_NONE, ABILITY_NONE},
         #endif
@@ -27538,7 +27538,7 @@ const struct BaseStats gBaseStats[] =
         .eggGroup1 = EGG_GROUP_HUMAN_LIKE,
         .eggGroup2 = EGG_GROUP_HUMAN_LIKE,
         #ifdef BATTLE_ENGINE
-            .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_SCREEN_CLEANER, ABILITY_SLUSH_RUSH},
+            .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_SCREEN_CLEANER, ABILITY_ICE_BODY},
         #else
             .abilities = {ABILITY_VITAL_SPIRIT, ABILITY_NONE},
         #endif
@@ -31715,8 +31715,8 @@ const struct BaseStats gBaseStats[] =
         .baseHP        = 74,
         .baseAttack    = 48,
         .baseDefense   = 76,
-        .baseSpeed     = 104,
-        .baseSpAttack  = 113,
+        .baseSpeed     = 114,
+        .baseSpAttack  = 123,
         .baseSpDefense = 81,
         .type1 = TYPE_PSYCHIC,
         .type2 = TYPE_PSYCHIC,
