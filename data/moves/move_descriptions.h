@@ -258,8 +258,8 @@ static const u8 sPeckDescription[] = _(
     "jabbing beak, etc.");
 
 static const u8 sDrillPeckDescription[] = _(
-    "A corkscrewing attack with\n"
-    "the beak acting as a drill.");
+    "Attacks will a drill-like beak.\n"
+    "High critical-hit ratio.");
 
 static const u8 sSubmissionDescription[] = _(
     "A reckless body slam that\n"
@@ -2346,8 +2346,8 @@ static const u8 sElectricTerrainDescription[] = _(
     "5 turns. Prevents sleep.");
 
 static const u8 sDazzlingGleamDescription[] = _(
-    "Damages foes by emitting\n"
-    "a bright flash. May lower Sp. Def.");
+    "Damages foes with bright flash.\n"
+    "May lower Sp. Def.");
 
 static const u8 sCelebrateDescription[] = _(
     "Congratulates you on your\n"
