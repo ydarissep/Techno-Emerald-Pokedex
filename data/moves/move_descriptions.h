@@ -670,8 +670,8 @@ static const u8 sTripleKickDescription[] = _(
     "row with rising intensity.");
 
 static const u8 sThiefDescription[] = _(
-    "While attacking, it may\n"
-    "steal the foe's held item.");
+    "A sneaky attack.\n"
+    "No longer steals held items.");
 
 static const u8 sSpiderWebDescription[] = _(
     "Ensnares the foe to stop it\n"
@@ -766,8 +766,8 @@ static const u8 sSpikesDescription[] = _(
     "foe switching in.");
 
 static const u8 sZapCannonDescription[] = _(
-    "Powerful and sure to cause\n"
-    "paralysis, but inaccurate.");
+    "A powerful blast of electricity.\n"
+    "Also hurts the user.");
 
 static const u8 sForesightDescription[] = _(
     "Negates the foe's efforts\n"
@@ -1370,8 +1370,8 @@ static const u8 sPoisonTailDescription[] = _(
     "ratio. May also poison.");
 
 static const u8 sCovetDescription[] = _(
-    "Cutely begs to obtain an\n"
-    "item held by the foe.");
+    "Cutely begs for a held item.\n"
+    "Beggars can't be choosers.");
 
 static const u8 sVoltTackleDescription[] = _(
     "A life-risking tackle that\n"

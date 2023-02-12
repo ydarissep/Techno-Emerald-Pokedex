@@ -3046,9 +3046,9 @@ const struct BattleMove gBattleMoves[MOVES_COUNT] =
         #else
             .power = 100,
         #endif
-        .effect = EFFECT_PARALYZE_HIT,
+        .effect = EFFECT_RECOIL_33,
         .type = TYPE_ELECTRIC,
-        .accuracy = 50,
+        .accuracy = 100,
         .pp = 5,
         .secondaryEffectChance = 100,
         .target = MOVE_TARGET_SELECTED,
