@@ -96,7 +96,7 @@ function displaySpecies(){
                 continue
             }
             if(abilityName !== "ABILITY_NONE"){
-                ability.innerText = `${sanitizeString(abilityName)} `
+                ability.innerText = `${abilities[abilityName]["ingameName"]} `
                 if(j === 2){
                     ability.style.fontWeight = "bold"
                 }

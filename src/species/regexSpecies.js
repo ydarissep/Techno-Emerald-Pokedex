@@ -121,12 +121,12 @@ function regexBaseStats(textBaseStats, species){
 function regexChanges(textChanges, species){
     const lines = textChanges.split("\n")
 
-    const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|type1|type2|itemCommon|itemRare|eggGroup1|eggGroup2|abilities/i
+    const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|type1|type2/i
     let stop = false, value, name, buildDefines = true, defines = {}, define = "", keep = false, argument = [], argumentDefine = []
 
     for(let i = 0; i < lines.length; i++){
         const line = lines[i]
-        if(buildDefines && /gBaseStats/i.test(line)){
+        if(buildDefines && /gSpeciesInfo/i.test(line)){
             buildDefines = false
         }
         if(buildDefines){
@@ -230,29 +230,14 @@ function regexChanges(textChanges, species){
                         if(matchInt !== null)
                             value = parseInt(matchInt[0])
                     }
-                    else if(match === "type1" || match === "type2" || match === "itemCommon" || match === "itemRare" || match === "eggGroup1" || match === "eggGroup2"){
+                    else if(match === "type1" || match === "type2"){
                         value = line.match(/\w+_\w+/i)
                         if(value !== null)
                             value = value[0]
                     }
-                    else if(match === "abilities"){
-                        value = line.match(/ABILITY_\w+/ig)
-                        if(value !== null){
-                            for (let i = 0; i < 3; i++){
-                                if(value[i] === "ABILITY_NONE" || value[i] === undefined && i >= 1)
-                                    value[i] = value[i-1]
-                            }
-                        }
-                    }
 
                     if(stop === false){
                         if(name in species){
-                            if(match === "itemCommon"){
-                                match = "item1"
-                            }
-                            else if(match === "itemRare"){
-                                match = "item2"   
-                            }
                             if(match in species[name] && JSON.stringify(species[name][match]) != JSON.stringify(value)){
                                 species[name]["changes"].push([match, value])
                             }   

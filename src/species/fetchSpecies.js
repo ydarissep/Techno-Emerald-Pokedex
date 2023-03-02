@@ -102,7 +102,7 @@ async function buildSpeciesObj(){
     species = await getEvolution(species)
     species = await getForms(species) // should be called in that order until here
     species = await getBaseStats(species)
-    species = await getChanges(species, "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/master/src/data/pokemon/base_stats.h")
+    species = await getChanges(species, "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/master/src/data/pokemon/species_info.h")
     species = await getLevelUpLearnsets(species)
     species = await getTMHMLearnsets(species)
     species = await getEggMovesLearnsets(species)

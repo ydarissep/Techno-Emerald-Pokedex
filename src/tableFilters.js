@@ -334,6 +334,33 @@ function createFilterArray(objInputArray, obj, sanitize = true){
 
 
 
+
+
+function createFilterArrayFromObject(objInputArray, obj, sanitize = true){
+    let list = []
+    for (const name of Object.keys(obj)){
+        for (let i = 0; i < objInputArray.length; i++){
+            let values = obj[name][objInputArray[i]]
+            for (let j = 0; j < values.length; j++)
+            {
+                let value = values[j]
+                if(sanitize){
+                    value = sanitizeString(value)
+                }
+                if(!list.includes(value)){
+                    list.push(value)
+                }
+            }
+        }
+    }
+    return list
+}
+
+
+
+
+
+
 function createFilter(value, label){
     const activeFilter = document.getElementsByClassName("activeFilter")[0]
     const tableFilterContainer = activeFilter.getElementsByClassName("filterContainer")[0]
