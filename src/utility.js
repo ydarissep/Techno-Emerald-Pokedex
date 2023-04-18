@@ -2,7 +2,7 @@ function sanitizeString(string){
     const regex = /^SPECIES_|^TYPE_|ABILITY_NONE|ABILITY_|^SPECIES_NONE|^MOVE_|^SPLIT_|FLAG_|^EFFECT_|^Z_EFFECT|^ITEM_|^EGG_GROUP_|^EVO_|^MAP_/ig
     const unsanitizedString = string.toString().replace(regex, "")
     let matchArray = unsanitizedString.match(/\w+/g)
-    if(matchArray !== null){
+    if(matchArray){
         for (i = 0; i < matchArray.length; i++){
             matchArray[i] = matchArray[i].split('_')
             for (j = 0; j < matchArray[i].length; j++){
