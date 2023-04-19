@@ -1,5 +1,5 @@
 function sanitizeString(string){
-    const regex = /^SPECIES_|^TYPE_|ABILITY_NONE|ABILITY_|^SPECIES_NONE|^MOVE_|^SPLIT_|FLAG_|^EFFECT_|^Z_EFFECT|^ITEM_|^EGG_GROUP_|^EVO_|^MAP_/ig
+    const regex = /^SPECIES_|^TYPE_|^ABILITY_|^MOVE_|^SPLIT_|FLAG_|^EFFECT_|^Z_EFFECT|^ITEM_|^EGG_GROUP_|^EVO_|^MAP_/ig
     const unsanitizedString = string.toString().replace(regex, "")
     let matchArray = unsanitizedString.match(/\w+/g)
     if(matchArray){
@@ -94,20 +94,44 @@ function footerP(input){
 
 function setDataList(){
     window.speciesIngameNameArray = []
-    Object.keys(species).forEach(speciesName => {
+    for(const speciesName in species){
+        if(species[speciesName]["baseSpeed"] <= 0){
+            continue
+        }
         const option = document.createElement("option")
         option.innerText = sanitizeString(speciesName)
         speciesIngameNameArray.push(option.innerText)
         speciesPanelInputSpeciesDataList.append(option)
-    })
+    }
 
     window.abilitiesIngameNameArray = []
-    Object.keys(abilities).forEach(abilityName => {
+    for(const abilityName in abilities){
+        if(!abilities[abilityName]["description"] || !/[1-9aA-zZ]/.test(abilities[abilityName]["ingameName"])){
+            continue
+        }
         const option = document.createElement("option")
-        option.innerText = sanitizeString(abilityName)
+        option.innerText = abilities[abilityName]["ingameName"]
         abilitiesIngameNameArray.push(option.innerText)
         abilitiesInputDataList.append(option)
-    })
+    }
+}
+
+
+
+
+
+function getSpeciesSpriteSrc(speciesName){
+    if(sprites[speciesName]){
+        if(sprites[speciesName].length < 500){
+            return species[speciesName]["sprite"]
+        }
+        else{
+            return sprites[speciesName]
+        }
+    }
+    else{
+        return species[speciesName]["sprite"]
+    }
 }
 
 
