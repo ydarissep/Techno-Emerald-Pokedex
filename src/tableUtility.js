@@ -63,7 +63,7 @@ function filterTableInput(input, obj, keyArray){
     for(let i = 0, j = Object.keys(tracker).length; i < j; i++){
         tracker[i]["filter"].push("input")
         for (let k = 0; k < keyArray.length; k++){
-            if(regexInput.test(("" + obj[tracker[i]["key"]][keyArray[k]]).replaceAll(/-|'| |_/g, ""))){
+            if(regexInput.test(sanitizeString("" + obj[tracker[i]["key"]][keyArray[k]]).replaceAll(/-|'| |_/g, ""))){
                 tracker[i]["filter"] = tracker[i]["filter"].filter(value => value !== "input")
                 break
             }
@@ -81,25 +81,24 @@ function filterTableInput(input, obj, keyArray){
 
 
 function filterLocationsTableInput(input, obj, keyArray){
-    const sanitizedInput = input.trim().replaceAll(/-|'| |_/g, "").toLowerCase()
-    const regexInput = new RegExp(sanitizedInput, "i")
+    const arraySanitizedInput = input.trim().split(/-|'| |,|_/g)
 
-    for(let i = 0, j = Object.keys(tracker).length; i < j; i++){
+    mainLoop: for(let i = 0, j = Object.keys(tracker).length; i < j; i++){
         const zone = tracker[i]["key"].split("\\")[0].replaceAll(/-|'| |_/g, "").toLowerCase()
         const method = tracker[i]["key"].split("\\")[1].replaceAll(/-|'| |_/g, "").toLowerCase()
         const name = tracker[i]["key"].split("\\")[2]
-        tracker[i]["filter"].push("input")
-        for (let k = 0; k < keyArray.length; k++){
-            if(name in species){
-                if(regexInput.test(zone) || regexInput.test(method)){
-                    tracker[i]["filter"] = tracker[i]["filter"].filter(value => value !== "input")
-                    continue
-                }
-                if(regexInput.test(("" + obj[name][keyArray[k]]).replaceAll(/-|'| |_/g, ""))){
-                    tracker[i]["filter"] = tracker[i]["filter"].filter(value => value !== "input")
-                    break
+        let compareString = `${zone},${method},`
+        if(name in species){
+            for (let k = 0; k < keyArray.length; k++){
+                compareString += (obj[name][keyArray[k]] + ",").replaceAll(/-|'| |_|species/gi, "").toLowerCase()
+            }
+            for(splitInput of arraySanitizedInput){
+                if(!compareString.includes(splitInput.toLowerCase())){
+                    tracker[i]["filter"].push("input")
+                    continue mainLoop
                 }
             }
+            tracker[i]["filter"] = tracker[i]["filter"].filter(value => value !== "input")
         }
     }
 
@@ -114,7 +113,7 @@ function filterLocationsTableInput(input, obj, keyArray){
 
 
 
-function lazyLoading(reset = false){
+async function lazyLoading(reset = false){
     const activeTable = document.querySelectorAll(".activeTable > tbody")[0]
     if(activeTable && typeof tracker !== 'undefined')
     {
@@ -122,6 +121,7 @@ function lazyLoading(reset = false){
             while (activeTable.firstChild) {
                 activeTable.removeChild(activeTable.firstChild)
             }
+            refreshURLParams()
         }
         let target = 75
         let counter = 0
@@ -208,6 +208,8 @@ async function tableButtonClick(input){
     targetFilter.classList.remove("hide")
     targetFilter.classList.add("activeFilter")
 
-    await lazyLoading(reset = true)
+    tracker = window[`${input}Tracker`]
+
+    await lazyLoading(true)
 }
 
