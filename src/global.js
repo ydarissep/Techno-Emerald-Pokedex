@@ -1,4 +1,4 @@
-window.repo = "ydarissep/Techno-Emerald-Pokedex/main"
+window.repo = "MythicalBlueFlare/techno-emerald/main"
 window.repoDex = "ydarissep/Techno-Emerald-Pokedex/main"
 
 window.tracker

@@ -119,7 +119,7 @@ function regexBaseStats(textBaseStats, species){
 function regexChanges(textChanges, species){
     const lines = textChanges.split("\n")
 
-    const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|type1|type2|abilities/i
+    const regex = /baseHP|baseAttack|baseDefense|baseSpeed|baseSpAttack|baseSpDefense|types|abilities/i
     let stop = false, value, name, buildDefines = true, defines = {}, define = "", keep = false, argument = [], argumentDefine = []
 
     for(let i = 0; i < lines.length; i++){
@@ -214,7 +214,7 @@ function regexChanges(textChanges, species){
 
             const matchRegex = line.match(regex)
 
-            if(matchRegex){
+            if(matchRegex && !stop){
                 let match = matchRegex[0]
 
 
@@ -224,10 +224,18 @@ function regexChanges(textChanges, species){
                     if(matchInt)
                         value = parseInt(matchInt[0])
                 }
-                else if(match === "type1" || match === "type2"){
-                    value = line.match(/\w+_\w+/i)
-                    if(value)
-                        value = value[0]
+                else if(match === "types"){
+                    value = line.match(/TYPE_\w+/ig)
+                    if(typeof value[0] !== 'undefined' && name in species){
+                        if(value[0] !== species[name]["type1"]){
+                            species[name]["changes"].push(["type1", value[0]])
+                        }
+                    }
+                    if(typeof value[1] !== 'undefined' && name in species){
+                        if(value[1] !== species[name]["type2"]){
+                            species[name]["changes"].push(["type2", value[1]])
+                        }
+                    }
                 }
                 else if(match === "abilities"){
                     value = line.match(/ABILITY_\w+/ig)
@@ -239,12 +247,10 @@ function regexChanges(textChanges, species){
                     }
                 }
 
-                if(stop === false){
-                    if(name in species){
-                        if(match in species[name] && JSON.stringify(species[name][match]) != JSON.stringify(value)){
-                            species[name]["changes"].push([match, value])
-                        }   
-                    }
+                if(name in species){
+                    if(match in species[name] && JSON.stringify(species[name][match]) != JSON.stringify(value)){
+                        species[name]["changes"].push([match, value])
+                    }   
                 }
             }
         }
@@ -531,7 +537,7 @@ function regexSprite(textSprite, conversionTable, species){
                 const matchPath = line.match(/graphics\/pokemon\/(\w+\/\w+\/\w+\/\w+\/\w+|\w+\/\w+\/\w+\/\w+|\w+\/\w+\/\w+|\w+\/\w+|\w+)\//i) // ¯\_(ツ)_/¯
                 if(matchPath){
                     const path = matchPath[1]
-                    const url = `https://raw.githubusercontent.com/${repoDex}/data/species/pokemon/${path}/front.png`
+                    const url = `https://raw.githubusercontent.com/${repo}/graphics/pokemon/${path}/front.png`
                     for(let i = 0; i < conversionTable[conversion].length; i++){
                         species[speciesArray[i]]["sprite"] = url
                     }
