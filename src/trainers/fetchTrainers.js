@@ -11,17 +11,17 @@ async function getTrainers(trainers){
     const textTrainers = await rawTrainers.text()
 
     const rawTrainersParties = await fetch(`https://raw.githubusercontent.com/${repo}/src/data/trainer_parties.h`)
-    const textTrainersParties = await rawTrainersParties.text()
+    let textTrainersParties = await rawTrainersParties.text()
 
     return await regexTrainersParties(textTrainersParties, await regexTrainers(textTrainers, trainers))
 }
 
 async function buildTrainersObj(){
     let trainers = {}
-
-    //trainers = await getScripts(trainers)
-    //trainers = await getTrainers(trainers)
     
+    trainers = await getScripts(trainers)
+    trainers = await getTrainers(trainers)
+
     trainers = await bugFixTrainers(trainers)
 
     await localStorage.setItem("trainers", LZString.compressToUTF16(JSON.stringify(trainers)))
@@ -74,7 +74,7 @@ async function fetchTrainersObj(){
                 sprites[sprite] = LZString.decompressFromUTF16(localStorage.getItem(sprite))
                 if(sprites[sprite].length < 500){
                     localStorage.removeItem(sprite)
-                    spriteRemoveBgReturnBase64(sprite, `https://raw.githubusercontent.com/${repo}/graphics/trainers/front_pics/${sprite.replace(/^TRAINER_PIC_/, "").toLowerCase()}_front_pic.png`)
+                    spriteRemoveBgReturnBase64(sprite)
                 }
             }
         })

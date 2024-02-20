@@ -1,5 +1,5 @@
 window.repo = "MythicalBlueFlare/techno-emerald/main"
-window.checkUpdate = "10 TE"
+window.checkUpdate = "11 TE"
 
 
 fetch('https://raw.githubusercontent.com/ydarissep/dex-core/main/index.html').then(async response => {

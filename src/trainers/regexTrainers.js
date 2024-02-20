@@ -1,8 +1,13 @@
 async function regexScripts(textScripts, trainers){
-    const scripts = textScripts.match(/data\/maps\/.*\/scripts.inc/ig)
+    let scripts = textScripts.match(/data\/maps\/.*\/scripts.inc/ig)
 
     for(let i = 0, j = scripts.length; i < j; i++){
-        fetch(`https://raw.githubusercontent.com/${repo}/${scripts[i]}`)
+        /*
+        if(scripts[i] === "data/maps/RuinsOfAlph_InnerChamber/scripts.inc"){
+            scripts[i] = "data/maps/RuinsofAlph_InnerChamber/scripts.inc"
+        }
+        */
+        fetch(`https://raw.githubusercontent.com/${repo}/data/${scripts[i].replace("data/", "")}`)
         .then(promises => {
             promises.text()
             .then(text => {
@@ -99,6 +104,9 @@ async function regexTrainers(textTrainers, trainers){
                     const matchTrainerName = line.match(/_\(\"(.*)\"\)/i)
                     if(matchTrainerName){
                         trainers[zone][trainer]["ingameName"] = matchTrainerName[1]
+                        if(/\{.*RIVAL_NAME\}/i.test(trainers[zone][trainer]["ingameName"])){
+                            trainers[zone][trainer]["ingameName"] = "Rival"
+                        }
                     }
                 }
                 /*
@@ -115,12 +123,6 @@ async function regexTrainers(textTrainers, trainers){
                 else if(/.doubleBattle *=/i.test(line)){
                     if(/TRUE *,/i.test(line)){
                         trainers[zone][trainer]["double"] = true
-                    }
-                }
-                else if(/.partyInsane *=/i.test(line)){
-                    const matchParty = line.match(/sParty_\w+/i)
-                    if(matchParty){
-                        conversionTable[matchParty[0]] = trainer
                     }
                 }
                 else if(/.party *=/i.test(line)){
@@ -144,8 +146,12 @@ async function regexTrainers(textTrainers, trainers){
 
 
 async function regexTrainersParties(textTrainersParties, [trainers, conversionTable, trainerToZone]){
+
+    
+
+
     const lines = textTrainersParties.split("\n")
-    let comment = false, trainer = null, zone = null, difficulty = "Normal", mon = {}
+    let comment = false, trainer = null, zone = null, difficulty = "Normal", mon = {}, EVs = [0, 0, 0, 0, 0, 0]
 
     lines.forEach(line => {
         line = line.trim()
@@ -157,15 +163,12 @@ async function regexTrainersParties(textTrainersParties, [trainers, conversionTa
             comment = false
         }
         
-        if(!comment && !/^\/\//.test(line)){
+        if((!comment && !/^\/\//.test(line))){
             if(/sParty_\w+/i.test(line)){
                 const party = line.match(/sParty_\w+/)[0]
                 if(conversionTable[party]){
                     trainer = conversionTable[party]
                     zone = trainerToZone[trainer]
-                    if(/Insane$/.test(party)){
-                        difficulty = "Elite"
-                    }
                 }
             }
             if(zone && trainers[zone][trainer]){
@@ -187,22 +190,47 @@ async function regexTrainersParties(textTrainersParties, [trainers, conversionTa
                         mon["item"] = matchItem[0]
                     }
                 }
-                else if(/.ability *=/i.test(line)){
-                    const matchAbility = line.match(/\d+/)
-                    if(matchAbility){
-                        mon["ability"] = matchAbility[0]
-                    }
-                }
-                else if(/.ivs *=/i.test(line)){
+                else if(/.iv *=/i.test(line)){
                     const matchIVs = line.match(/\d+/g)
                     if(matchIVs){
-                        mon["ivs"] = matchIVs
+                        const IVs = Math.floor(matchIVs[0] * 31 / 255)
+                        mon["ivs"] = [IVs, IVs, IVs, IVs, IVs, IVs]
                     }
                 }
-                else if(/.evs *=/i.test(line)){
-                    const matchEVs = line.match(/\d+/g)
-                    if(matchEVs){
-                        mon["evs"] = matchEVs
+                else if(/.evHp *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[0] = matchEV[0]
+                    }
+                }
+                else if(/.evAtk *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[1] = matchEV[0]
+                    }
+                }
+                else if(/.evDef *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[2] = matchEV[0]
+                    }
+                }
+                else if(/.evSatk *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[3] = matchEV[0]
+                    }
+                }
+                else if(/.evSdef *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[4] = matchEV[0]
+                    }
+                }
+                else if(/.evSpd *=/i.test(line)){
+                    const matchEV = line.match(/\d+/)
+                    if(matchEV){
+                        EVs[5] = matchEV[0]
                     }
                 }
                 else if(/.nature *=/i.test(line)){
@@ -218,12 +246,31 @@ async function regexTrainersParties(textTrainersParties, [trainers, conversionTa
                     }
                 }
                 else if(/^} *,?$/.test(line)){
-                    if(mon["lvl"] && mon["name"] && mon["item"] && mon["ability"] && mon["ivs"] && mon["evs"] && mon["nature"] && mon["moves"]){
+                    if(mon["lvl"] && mon["name"]){ 
+                        if(!mon["item"]){
+                            mon["item"] = "ITEM_NONE"
+                        }
+                        if(!mon["ability"]){
+                            mon["ability"] = 0
+                        }
+                        if(!mon["ivs"]){
+                            mon["ivs"] = [0]
+                        }
+                        if(!mon["evs"]){
+                            mon["evs"] = EVs
+                        }
+                        if(!mon["nature"]){
+                            mon["nature"] = "NATURE_DOCILE"
+                        }
+                        if(!mon["moves"]){
+                            mon["moves"] = getWildPokemonLearnsets(mon["name"], mon["lvl"])
+                        }
                         if(!trainers[zone][trainer]["party"][difficulty]){
                             trainers[zone][trainer]["party"][difficulty] = []
                         }
                         trainers[zone][trainer]["party"][difficulty].push(mon)
                     }
+                    EVs = [0, 0, 0, 0, 0, 0]
                     mon = {}
                 }
                 else if(/^} *;$/.test(line)){
@@ -257,4 +304,27 @@ function initTrainer(trainers, trainer, zone){
     trainers[zone][trainer]["items"] = []
     trainers[zone][trainer]["double"] = false
     trainers[zone][trainer]["party"] = {}
+}
+
+
+
+
+function getWildPokemonLearnsets(name, lvl){
+    let validMoves = []
+    let moves = []
+
+    for(let i = 0, j = species[name]["levelUpLearnsets"].length; i < j; i++){
+        if(species[name]["levelUpLearnsets"][i][1] > lvl){
+            break
+        }
+        validMoves.push(species[name]["levelUpLearnsets"][i][0])
+    }
+
+    for(let i = validMoves.length, j = 0; i > 0 && j < 4; i--, j++){
+        if(!moves.includes(validMoves[i - 1])){
+            moves.push(validMoves[i - 1])
+        }
+    }
+
+    return moves
 }
