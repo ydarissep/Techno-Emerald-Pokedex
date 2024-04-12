@@ -190,6 +190,12 @@ async function regexTrainersParties(textTrainersParties, [trainers, conversionTa
                         mon["item"] = matchItem[0]
                     }
                 }
+                else if(/.abilityNums *=/i.test(line)){
+                    const matchAbility = line.match(/\d+/)
+                    if(matchAbility){
+                        mon["ability"] = matchAbility[0]
+                    }
+                }
                 else if(/.iv *=/i.test(line)){
                     const matchIVs = line.match(/\d+/g)
                     if(matchIVs){
