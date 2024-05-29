@@ -1,6 +1,6 @@
 window.repo = "MythicalBlueFlare/techno-emerald/main"
 window.checkUpdate = "13 TE"
-
+window.showShinyToggle = true
 
 fetch('https://raw.githubusercontent.com/ydarissep/dex-core/main/index.html').then(async response => {
 	return response.text()
